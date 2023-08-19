@@ -36,7 +36,7 @@ public class DataManager : MonoBehaviour
     #endregion
     public void LoadGameData()
     {
-        string filePath = Application.persistentDataPath + "/" + GameDataFileName;
+        string filePath = Application.dataPath + "/" + GameDataFileName;
 
         // 저장된 게임이 있다면
         if (File.Exists(filePath))
@@ -70,6 +70,8 @@ public class DataManager : MonoBehaviour
                 _coloredObjects[i].startAsEyeball = gameData.isEyeBallList[i];
                 _coloredObjects[i].InitEyeball();
             }
+
+            Debug.Log("Load: " + filePath);
         }
         // 저장된 게임이 없다면 새로 데이터 지정
         else
@@ -107,7 +109,7 @@ public class DataManager : MonoBehaviour
 
         // 클래스를 Json 형식으로 전환
         string ToJsonData = JsonUtility.ToJson(gameData, true);
-        string filePath = Application.persistentDataPath + "/" + GameDataFileName;
+        string filePath = Application.dataPath + "/" + GameDataFileName;
 
 
         // 이미 저장된 파일이 있다면 덮어쓰고, 없다면 새로 만들어서 저장
@@ -136,7 +138,7 @@ public class DataManager : MonoBehaviour
 
         // 클래스를 Json 형식으로 전환
         string ToJsonData = JsonUtility.ToJson(gameData, true);
-        string filePath = Application.persistentDataPath + "/" + GameDataFileName;
+        string filePath = Application.dataPath + "/" + GameDataFileName;
 
 
         // 이미 저장된 파일이 있다면 덮어쓰고, 없다면 새로 만들어서 저장

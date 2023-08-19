@@ -7,9 +7,13 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+    public Texture2D cursurIcon;
+
     public static UIManager instance;
 
     private Canvas canvas;
+
+    Vector2 hotSpot;
 
     #region UI Prefab
     // [SerializeField] private GameObject ColorInfoChildPref;    
@@ -35,6 +39,15 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        string str = SceneManager.GetActiveScene().name.Substring(5, 1);
+        Debug.Log(str);
+        if (int.Parse(str) >= 2)
+        {
+            hotSpot.x = cursurIcon.width / 2;
+            hotSpot.y = cursurIcon.height / 2;
+            Cursor.SetCursor(cursurIcon, hotSpot, CursorMode.Auto);
+        }
+       
         canvas = GetComponent<Canvas>();
         ColorList[0].color = ColorManager.instance.red;
         ColorList[1].color = ColorManager.instance.green;

@@ -539,6 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bbe565cb1d7681438ca323fe9fe5799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursurIcon: {fileID: 2800000, guid: 45d2ff2c2a244344da502aa45728512c, type: 3}
   GameOverPref: {fileID: 8013227902386219604, guid: 8c5b3920fa12a6046805f42a6b82c33f, type: 3}
   XBtnPref: {fileID: 2769685868549737240, guid: e2748e6da02eb94438457b4b56e5b908, type: 3}
   maxColorCount: 3

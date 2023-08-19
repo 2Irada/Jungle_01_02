@@ -11,7 +11,9 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
     public bool startAsEyeball;
     [HideInInspector] public bool isEyeball;
     [HideInInspector] public bool isTriggerActive;
-    [HideInInspector] public bool isDownSpike;
+    
+    private bool isDownOn;
+    public bool isDownSpike;
 
     private bool _isJellied = false;
     private List<SpriteRenderer> _eyeballRenderers = new List<SpriteRenderer>();
@@ -112,6 +114,12 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
     public void UpdateColoringLogic()
     {
         currentColoring = _isJellied? FindObjectOfType<JellyShooter>().jellyColoring : objectColoring;
+        
+        if (isDownSpike)
+        {
+            //if(transform.rotation)
+            transform.Translate(Vector2.up * 0.8f);
+        }
 
         if (ColorManager.instance.mainColoring != currentColoring) //색 다를 때
         {
@@ -135,6 +143,8 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
                 SetActiveLineRenderer(false);
                 _spriteRenderer.enabled = true;
             }
+
+            
         }
         else //색 같을때
         {
@@ -217,5 +227,4 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
             _eyeballRenderers[i].color = new Color(_color.r, _color.g, _color.b, alpha);
         }
     }
-
 }
