@@ -9,47 +9,129 @@ public class JellyShooter : MonoBehaviour
     public JellyData data;
     public JellyBullet jellyBullet;
     public GameObject slimeHeadGraphic;
+    public GameObject basicArm;
+    public GameObject slimeEye;
 
     public Coloring jellyColoring = Coloring.Red;
 
-    [HideInInspector] public ColoredObject jelliedObject = null;
-    public bool canShoot = true;
-    public bool canRetrieve = false;
+    public ColoredObject jelliedObject = null;
+    public ColoredObject eyeObject = null;
+
+    public bool canShootJelly = true;    
+    public bool canRetrieveJelly = false;
+
+    public bool isEyeGet = false;
+
+    public bool canShootArm = true;
 
     private void Start()
     {
         UpdateHeadColor();
-        canShoot = true;
-        canRetrieve = false;
+        canShootJelly = true;
+        canRetrieveJelly = false;
+        
+        canShootArm = true;
+
+        isEyeGet = false;
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (jelliedObject == null)
-            {
-                var _hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition));
-                if (_hit.collider != null)
-                {
-                    ColoredObject _obj = _hit.collider.GetComponent<ColoredObject>();
-                    if (_obj != null && _obj.isEyeball)
-                    {
-                        if (canShoot) ShootJelly(_obj.transform);
-                    }
-                }
-            }
+            IsJellyBlock();
+        }
 
-            else if(jelliedObject != null)
+        else if(Input.GetMouseButtonDown(1))
+        {
+            var _hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition));
+            
+            if(_hit.collider != null)
             {
-                if (canRetrieve) RetriveJelly();
+                ColoredObject _obj = _hit.collider.GetComponent<ColoredObject>();
+                if (_obj != null && !_obj.isEyeball && isEyeGet)
+                {
+                    eyeObject = _obj;
+                    ShootArmSetEye();
+                    Debug.Log("SetArm");
+                }
+
+                else if (_obj != null && _obj.isEyeball && !isEyeGet)
+                {
+                    eyeObject = _obj;
+                    ShootArmGetEye();
+                    Debug.Log("GetArm");
+                }
             }
         }
     }
 
+    private void IsJellyBlock()
+    {
+        if (jelliedObject == null)
+        {
+            CheckShoot();
+        }
+        else if (jelliedObject != null)
+        {
+            if (canRetrieveJelly) RetriveJelly();
+        }
+    }
+
+    private void CheckShoot()
+    {
+        var _hit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition));
+
+        if (_hit.collider != null)
+        {
+            ColoredObject _obj = _hit.collider.GetComponent<ColoredObject>();
+            if (_obj != null && _obj.isEyeball)
+            {
+                if (canShootJelly) ShootJelly(_obj.transform);
+            }
+        }
+        else if (jelliedObject != null)
+        {
+            if (canRetrieveJelly) RetriveJelly();
+        }
+    }
+
+    private void ShootArmSetEye()
+    {
+        if (!eyeObject.isEyeball)
+        {
+            eyeObject.EyeballGet();
+            //jelliedObject = null;
+            eyeObject.isEyeball = true;
+            eyeObject.UpdateColoringLogic();
+        }
+
+        isEyeGet = false;
+        slimeEye.SetActive(false);
+        //basicArm.SetActive(false);       
+    }
+
+
+    private void ShootArmGetEye()
+    {
+        if (eyeObject.isEyeball)
+        {
+            eyeObject.EyeballEaten();
+            //jelliedObject = null;
+            eyeObject.isEyeball = false;
+            eyeObject.UpdateColoringLogic();
+        }
+
+        isEyeGet = true;
+        slimeEye.SetActive(true);
+        //basicArm.SetActive(false);
+    }
+
+
+
     private void ShootJelly(Transform target)
     {
-        canShoot = false;
+        canShootJelly = false;
         slimeHeadGraphic.SetActive(false);
         jellyBullet.transform.position = slimeHeadGraphic.transform.position;
         jellyBullet.SetTarget(target, false);
@@ -65,7 +147,7 @@ public class JellyShooter : MonoBehaviour
             jelliedObject.JellyLeavesEyeball();
         }
 
-        canRetrieve = false;
+        canRetrieveJelly = false;
         jellyBullet.transform.position = jelliedObject.transform.position;
         jellyBullet.SetTarget(slimeHeadGraphic.transform, true);
         jellyBullet.GetComponent<SpriteRenderer>().color = ColorManager.instance.GetColorByColoring(jellyColoring);
@@ -93,7 +175,7 @@ public class JellyShooter : MonoBehaviour
     {
         jelliedObject.GetJellied(jellyColoring);
         this.jelliedObject = jelliedObject;
-        canRetrieve = true;
+        canRetrieveJelly = true;
     }
 
     public void UnjellifyComplete()
@@ -104,6 +186,7 @@ public class JellyShooter : MonoBehaviour
 
     public void SetJellyColoring(Coloring coloring)
     {
+        Debug.Log(coloring);
         jellyColoring = coloring;
         UpdateHeadColor();
     }

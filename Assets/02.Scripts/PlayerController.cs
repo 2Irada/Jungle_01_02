@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] Animator jellyAnimator;
+
     [SerializeField] private LayerMask platformLayerMask;
 
     public BoxCollider2D groundChecker;
@@ -39,6 +41,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        if (!jellyAnimator.enabled) jellyAnimator.enabled = true;
         jumpCount = 0;
         rigid = GetComponent<Rigidbody2D>();
         playerXScale = transform.localScale.x;
@@ -169,6 +172,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        /*
         Color rayColor;
         if(rayCastHit.collider != null)
         {
@@ -178,10 +182,10 @@ public class PlayerController : MonoBehaviour
             rayColor = Color.red;
         }
 
-        //Debug.DrawRay(groundChecker.bounds.center + new Vector3(groundChecker.bounds.extents.x, 0), Vector2.down * (groundChecker.bounds.extents.y + extraHeightText), rayColor);
-        //Debug.DrawRay(groundChecker.bounds.center - new Vector3(groundChecker.bounds.extents.x, 0), Vector2.down * (groundChecker.bounds.extents.y + extraHeightText), rayColor);
-        //Debug.DrawRay(groundChecker.bounds.center - new Vector3(groundChecker.bounds.extents.x, groundChecker.bounds.extents.y + extraHeightText), Vector2.right * (groundChecker.bounds.extents.x), rayColor);
-
+        Debug.DrawRay(groundChecker.bounds.center + new Vector3(groundChecker.bounds.extents.x, 0), Vector2.down * (groundChecker.bounds.extents.y + extraHeightText), rayColor);
+        Debug.DrawRay(groundChecker.bounds.center - new Vector3(groundChecker.bounds.extents.x, 0), Vector2.down * (groundChecker.bounds.extents.y + extraHeightText), rayColor);
+        Debug.DrawRay(groundChecker.bounds.center - new Vector3(groundChecker.bounds.extents.x, groundChecker.bounds.extents.y + extraHeightText), Vector2.right * (groundChecker.bounds.extents.x), rayColor);
+        */
 
         return rayCastHit.collider != null;
     }
@@ -197,6 +201,7 @@ public class PlayerController : MonoBehaviour
     public IEnumerator DeathCoroutine()
     {
         isDead = true;
+        jellyAnimator.enabled = false;
         DeathEffect();
         yield return new WaitForSeconds(1f);
         GameOver();

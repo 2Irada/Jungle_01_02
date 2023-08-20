@@ -33,7 +33,7 @@ public class JellyBullet : MonoBehaviour
             {
                 //머리 생기기
                 _shooter.slimeHeadGraphic.gameObject.SetActive(true);
-                _shooter.canShoot = true;
+                _shooter.canShootJelly = true;
                 gameObject.SetActive(false);
             }
         }

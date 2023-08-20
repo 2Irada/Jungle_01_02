@@ -9,7 +9,7 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
     [HideInInspector] public Coloring currentColoring = new Coloring();
     public GameObject eyeballObject;
     public bool startAsEyeball;
-    [HideInInspector] public bool isEyeball;
+    public bool isEyeball;
     [HideInInspector] public bool isTriggerActive;
     
     private bool isDownOn;
@@ -204,10 +204,19 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
 
     public void EyeballEaten()
     {
-        if (isEyeball == false) return;
+        if (!isEyeball) return;
         //传彬 绝局扁
         eyeballObject.SetActive(false);
+        Debug.Log("EyeballEat");
     }
+    public void EyeballGet()
+    {
+        if (isEyeball) return;
+        //传彬 绝局扁
+        eyeballObject.SetActive(true);
+        Debug.Log("EyeballGet");
+    }
+
 
     public void JellyLeavesEyeball()
     {
