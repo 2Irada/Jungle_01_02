@@ -1,11 +1,11 @@
 {
-    "sceneIndex": -1,
+    "sceneIndex": 2,
     "deathCount": 0,
     "respawnPoint": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 179.08999633789063,
+        "y": -36.779998779296878
     },
-    "jellyColoring": 1,
-    "mainColoring": 1,
+    "jellyColoring": 2,
+    "mainColoring": 2,
     "isEyeBallList": []
 }

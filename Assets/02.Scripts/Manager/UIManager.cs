@@ -7,13 +7,11 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public Texture2D cursurIcon;
+    public bool isAimingCursorOn = false;
 
     public static UIManager instance;
 
     private Canvas canvas;
-
-    Vector2 hotSpot;
 
     #region UI Prefab
     // [SerializeField] private GameObject ColorInfoChildPref;    
@@ -32,21 +30,17 @@ public class UIManager : MonoBehaviour
     private bool plusIngku;
     public static int deathCount;
 
+    public int sceneNum;
+
     void Awake()
     {
+        sceneNum = SceneManager.GetActiveScene().buildIndex;
         instance = this;
     }
 
     private void Start()
     {
-        string str = SceneManager.GetActiveScene().name.Substring(5, 1);
-        Debug.Log(str);
-        if (int.Parse(str) >= 2)
-        {
-            hotSpot.x = cursurIcon.width / 2;
-            hotSpot.y = cursurIcon.height / 2;
-            Cursor.SetCursor(cursurIcon, hotSpot, CursorMode.Auto);
-        }
+        
        
         canvas = GetComponent<Canvas>();
         ColorList[0].color = ColorManager.instance.red;

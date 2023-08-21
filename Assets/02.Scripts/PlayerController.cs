@@ -29,8 +29,10 @@ public class PlayerController : MonoBehaviour
 
     #region PlayerJumpVariable
     private bool isGround;
-    [SerializeField] private bool isJump;
+    private bool isItemGet;
 
+    [SerializeField] private GameObject doubleJumpObject;
+    [SerializeField] private Animator doubleJumpAnim;
     [SerializeField] private float jumpHeight;
     [SerializeField] private int maxJump;
     private float jumpForce;
@@ -41,6 +43,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        doubleJumpObject.SetActive(false);
+        doubleJumpAnim.enabled = false;
         if (!jellyAnimator.enabled) jellyAnimator.enabled = true;
         jumpCount = 0;
         rigid = GetComponent<Rigidbody2D>();
@@ -79,15 +83,28 @@ public class PlayerController : MonoBehaviour
 
     void PlayerJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && jumpCount < maxJump)
+        if (Input.GetKeyDown(KeyCode.Space) && jumpCount < maxJump && fdt < 0.1f)
         {
-            ColorManager.instance.AutoSwitchMainColoring();
-            rigid.velocity = Vector2.zero;
-            jumpForce = Mathf.Sqrt(jumpHeight * -2 * (Physics2D.gravity.y * rigid.gravityScale));
-            rigid.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-            isJump = true;
+            PlayerJumpFx();
+        }
+
+        else if(Input.GetKeyDown(KeyCode.Space) && jumpCount < maxJump && isItemGet)
+        {
+            PlayerJumpFx();
         }
     }
+
+    void PlayerJumpFx()
+    {
+        doubleJumpObject.SetActive(false);
+        doubleJumpAnim.enabled = false;
+        isItemGet = false;
+        ColorManager.instance.AutoSwitchMainColoring();
+        rigid.velocity = Vector2.zero;
+        jumpForce = Mathf.Sqrt(jumpHeight * -2 * (Physics2D.gravity.y * rigid.gravityScale));
+        rigid.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+    }
+
 
     void PlayerMove()
     {
@@ -105,7 +122,7 @@ public class PlayerController : MonoBehaviour
         transform.localScale = playerScale;
         transform.Translate(Vector2.right * Time.deltaTime * playerSpeed * horInput);
     }
-    
+    /*
     void OnCollisionExit2D(Collision2D collision)
     { // check to player Fall, use OnCollisionExit
         if (collision.gameObject.CompareTag("Ground"))
@@ -114,18 +131,17 @@ public class PlayerController : MonoBehaviour
             jumpCount = maxJump;
         }
     }
-    
+    */
 
     void OnTriggerEnter2D(Collider2D other)
     {
         ColoredObject _co = other.gameObject.GetComponent<ColoredObject>();
         if (other.gameObject.CompareTag("Item"))
         {
-            
             if (_co.isTriggerActive && !isGround)
             {
+                //StopAllCoroutines();
                 fdt = 0f;
-                isJump = false;
                 jumpCount = 0;
 
                 StartCoroutine(ResetItem());
@@ -134,8 +150,15 @@ public class PlayerController : MonoBehaviour
 
             IEnumerator ResetItem()
             { // item regenerate after 3 sec
+                doubleJumpObject.SetActive(true);
+                doubleJumpAnim.enabled = true;
+                isItemGet = true;
                 other.gameObject.SetActive(false);
-                yield return new WaitForSeconds(3);
+                yield return new WaitForSeconds(2);
+                doubleJumpObject.SetActive(false);
+                doubleJumpAnim.enabled = false;
+                isItemGet = false;
+                yield return new WaitForSeconds(1);
                 _co.UpdateColoringLogic();
                 other.gameObject.SetActive(true);
             }
@@ -156,22 +179,29 @@ public class PlayerController : MonoBehaviour
     {
         float extraHeightText = 0.2f;
         // RaycastHit2D rayCastHit = Physics2D.Raycast(groundChecker.bounds.center, Vector2.down, groundChecker.bounds.extents.y + extraHeightText, platformLayerMask);
-        RaycastHit2D rayCastHit = Physics2D.BoxCast(groundChecker.bounds.center, groundChecker.bounds.size, 0f, Vector2.down, extraHeightText, platformLayerMask);
-        if (rayCastHit.collider != null && !rayCastHit.collider.isTrigger)
+        RaycastHit2D[] rayCastHit = Physics2D.BoxCastAll(groundChecker.bounds.center, groundChecker.bounds.size, 0f, Vector2.down, extraHeightText, platformLayerMask);
+        
+        bool value = false;
+
+
+        for(int i = 0; i < rayCastHit.Length; i++)
         {
-            fdt = 0f;
-            jumpCount = 0;
-        }
-        else
-        {
-            if (isJump)
+            if (rayCastHit[i].collider != null && !rayCastHit[i].collider.isTrigger)
             {
-                jumpCount++;
-                Debug.Log(jumpCount);                
-                isJump = false;
-            }
+                //doubleJumpAnim.SetActive(false);
+                isItemGet= false;
+                fdt = 0f;
+                jumpCount = 0;
+                value = true;
+            }           
         }
 
+        if(!value && !isItemGet)
+        {           
+            jumpCount++;
+        }
+
+        value = false;
         /*
         Color rayColor;
         if(rayCastHit.collider != null)
@@ -186,8 +216,7 @@ public class PlayerController : MonoBehaviour
         Debug.DrawRay(groundChecker.bounds.center - new Vector3(groundChecker.bounds.extents.x, 0), Vector2.down * (groundChecker.bounds.extents.y + extraHeightText), rayColor);
         Debug.DrawRay(groundChecker.bounds.center - new Vector3(groundChecker.bounds.extents.x, groundChecker.bounds.extents.y + extraHeightText), Vector2.right * (groundChecker.bounds.extents.x), rayColor);
         */
-
-        return rayCastHit.collider != null;
+        return value;
     }
 
     void CheckGameOver()

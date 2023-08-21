@@ -131,7 +131,7 @@ public class DataManager : MonoBehaviour
     public void ResetJson()
     {
         //sceneIndex 저장
-        gameData.sceneIndex = -1;
+        gameData.sceneIndex = 1;
 
         //respawnPoint 저장
         gameData.respawnPoint = Vector3.zero;
@@ -151,7 +151,7 @@ public class DataManager : MonoBehaviour
         string ToJsonData = JsonUtility.ToJson(gameData, true);
         string filePath = Application.dataPath + "/" + GameDataFileName;
 
-
+        LoadGameData();
         // 이미 저장된 파일이 있다면 덮어쓰고, 없다면 새로 만들어서 저장
         File.WriteAllText(filePath, ToJsonData);
         Debug.Log("save: " + filePath);

@@ -31,6 +31,7 @@ public class JellyEffect : MonoBehaviour
     private void OnEnable()
     {
         FindObjectOfType<ColorManager>().mainColoringChanged += UpdateJellyEffectVisibleness;
+        
     }
 
     private void OnDisable()

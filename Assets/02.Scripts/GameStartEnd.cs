@@ -21,7 +21,7 @@ public class GameStartEnd : MonoBehaviour
     {
         //SceneManager.LoadScene("Stage1");
         DataManager.instance.ResetJson();
-        SceneManager.LoadScene("Stage"+DataManager.instance.gameData.sceneIndex);
+        SceneManager.LoadScene(DataManager.instance.gameData.sceneIndex);
 
     }
 

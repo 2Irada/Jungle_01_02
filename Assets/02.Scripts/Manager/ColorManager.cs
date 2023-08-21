@@ -52,10 +52,48 @@ public class ColorManager : MonoBehaviour
     /// </summary>
     public void AutoSwitchMainColoring()
     {
-        if (mainColoring == Coloring.Black) { SwitchMainColoring(Coloring.Red); }
-        else if (mainColoring == Coloring.Red) { SwitchMainColoring(Coloring.Green); }
-        else if (mainColoring == Coloring.Green) { SwitchMainColoring(Coloring.Blue); }
-        else if (mainColoring == Coloring.Blue) { SwitchMainColoring(Coloring.Red); }
+        if (mainColoring == Coloring.Black) 
+        { 
+            SwitchMainColoring(Coloring.Red); 
+        }
+        else if (mainColoring == Coloring.Red) 
+        { 
+            SwitchMainColoring(Coloring.Green); 
+        }
+        else if (mainColoring == Coloring.Green) 
+        { 
+            SwitchMainColoring(Coloring.Blue); 
+        }
+        else if (mainColoring == Coloring.Blue) 
+        { 
+            SwitchMainColoring(Coloring.Red); 
+        }
+    }
+
+    public Coloring AutoSwitchColoring(Coloring coloring)
+    {
+        if (coloring == Coloring.Black)
+        {
+            coloring = Coloring.Red;
+            return coloring;
+        }
+        else if (coloring == Coloring.Red)
+        {
+            coloring = Coloring.Green;
+            return coloring;
+        }
+        else if (coloring == Coloring.Green)
+        {
+            coloring = Coloring.Blue;
+            return coloring;
+        }
+        else if (coloring == Coloring.Blue)
+        {
+            coloring = Coloring.Red;
+            return coloring;
+        }
+
+        else return Coloring.Black;
     }
 
     /// <summary>

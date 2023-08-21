@@ -8,14 +8,16 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
     public Coloring objectColoring = new Coloring();
     [HideInInspector] public Coloring currentColoring = new Coloring();
     public GameObject eyeballObject;
+    public GameObject glasses;
     public bool startAsEyeball;
     public bool isEyeball;
     [HideInInspector] public bool isTriggerActive;
     
     private bool isDownOn;
-    public bool isDownSpike;
+    //public bool isDownSpike;
+    [SerializeField] private bool isChangeBlock;
 
-    private bool _isJellied = false;
+    public bool _isJellied = false;
     private List<SpriteRenderer> _eyeballRenderers = new List<SpriteRenderer>();
     private bool _didEyeBallInit = false;
     
@@ -44,6 +46,7 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
 
     private void OnDisable()
     {
+        
         ColorManager.instance.mainColoringChanged -= UpdateColoringLogic;
     }
 
@@ -113,12 +116,12 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
     /// </summary>
     public void UpdateColoringLogic()
     {
-        currentColoring = _isJellied? FindObjectOfType<JellyShooter>().jellyColoring : objectColoring;
-        
-        if (isDownSpike)
-        {
-            //if(transform.rotation)
-            transform.Translate(Vector2.up * 0.8f);
+        if (isChangeBlock) {
+            glasses.gameObject.SetActive(true);
+            currentColoring = _isJellied ? FindObjectOfType<JellyShooter>().jellyColoring : ColorManager.instance.mainColoring;
+        }
+        else {
+            currentColoring = _isJellied ? FindObjectOfType<JellyShooter>().jellyColoring : objectColoring;
         }
 
         if (ColorManager.instance.mainColoring != currentColoring) //»ö ´Ù¸¦ ¶§
@@ -207,14 +210,12 @@ public class ColoredObject : MonoBehaviour, ISerializationCallbackReceiver
         if (!isEyeball) return;
         //´«±ò ¾ø¾Ö±â
         eyeballObject.SetActive(false);
-        Debug.Log("EyeballEat");
     }
     public void EyeballGet()
     {
         if (isEyeball) return;
         //´«±ò ¾ø¾Ö±â
         eyeballObject.SetActive(true);
-        Debug.Log("EyeballGet");
     }
 
 
