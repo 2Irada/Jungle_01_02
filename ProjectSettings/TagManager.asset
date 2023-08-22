@@ -9,6 +9,7 @@ TagManager:
   - Jelly
   - Spike
   - Eye
+  - Reset
   layers:
   - Default
   - TransparentFX

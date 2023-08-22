@@ -26,7 +26,7 @@ public class ArmShoot : MonoBehaviour
 
     private void OnEnable()
     {
-        if(!_shooter.isEyeGet)
+        if (!_shooter.isEyeGet)
         {
             eyeGetObj.SetActive(true);
             _shooter.slimeEye.SetActive(false);
@@ -44,7 +44,7 @@ public class ArmShoot : MonoBehaviour
     private void Update()
     {
         if (!isReturning && Vector2.Distance(transform.position, _target.position) > data.jellyBulletSpeed * Time.deltaTime * 2f)
-        {            
+        {
             Vector2 direction = (_target.position - transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -53,9 +53,9 @@ public class ArmShoot : MonoBehaviour
 
         else
         {
-            if (_shooter.isEyeGet) 
-            { 
-                eyeGetObj.SetActive(true); 
+            if (_shooter.isEyeGet)
+            {
+                eyeGetObj.SetActive(true);
             }
 
             else eyeGetObj.SetActive(false);
@@ -77,12 +77,11 @@ public class ArmShoot : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(isReturning && collision.gameObject.CompareTag("Eye"))
+        if (isReturning && collision.gameObject.CompareTag("Eye"))
         {
-            
             isReturning = false;
-            if(_shooter.isEyeGet)
-            {               
+            if (_shooter.isEyeGet)
+            {
                 _shooter.slimeEye.SetActive(true);
             }
 

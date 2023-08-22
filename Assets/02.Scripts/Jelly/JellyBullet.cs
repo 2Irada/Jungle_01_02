@@ -47,7 +47,11 @@ public class JellyBullet : MonoBehaviour
             FindObjectOfType<JellyEffect>().JellyEffectOn(_target, transform.position);
             _target.GetComponent<ColoredObject>().EyeballEaten();
             gameObject.SetActive(false);
+        }
 
+        if(collision.gameObject.CompareTag("Reset"))
+        {
+            isReturning = true;
         }
     }
 }

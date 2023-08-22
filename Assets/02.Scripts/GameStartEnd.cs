@@ -5,17 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class GameStartEnd : MonoBehaviour
 {
-    
-    private void Start()
-    {
-        if(SceneManager.GetActiveScene().name == "Ending") StartCoroutine(Ending());
-    }
-
-    IEnumerator Ending()
-    {
-        yield return new WaitForSeconds(5.0f);
-        SceneManager.LoadScene(0);
-    }
 
     public void loadNextScene()
     {
@@ -23,6 +12,12 @@ public class GameStartEnd : MonoBehaviour
         DataManager.instance.ResetJson();
         SceneManager.LoadScene(DataManager.instance.gameData.sceneIndex);
 
+    }
+
+    public void loadStage(int value)
+    {
+        DataManager.instance.ResetJson();
+        SceneManager.LoadScene("Stage"+value);
     }
 
     // Update is called once per frame

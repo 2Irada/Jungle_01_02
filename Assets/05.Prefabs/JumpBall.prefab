@@ -189,8 +189,8 @@ MonoBehaviour:
   objectColoring: 1
   currentColoring: 0
   eyeballObject: {fileID: 7799628931754303034}
-  glasses: {fileID: 0}
-  startAsEyeball: 1
+  glasses: {fileID: 4420282339550736477}
+  startAsEyeball: 0
   isEyeball: 0
   isTriggerActive: 0
   isChangeBlock: 0

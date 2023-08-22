@@ -40,8 +40,7 @@ public class JellyShooter : MonoBehaviour
     public bool canShootArm = true;
 
     private void Start()
-    {
-        
+    {        
         //int alpha = int.Parse(str);
         switch(UIManager.instance.sceneNum)
         {
@@ -55,6 +54,7 @@ public class JellyShooter : MonoBehaviour
                 worldLockJelly = true;
                 break;
             case 3:
+                SetCursorIcon(1);
                 worldLockArm = true;
                 worldLockJelly = true;
                 break;
@@ -299,4 +299,17 @@ public class JellyShooter : MonoBehaviour
         jellyColoring = coloring;
         UpdateHeadColor();
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Reset"))
+        {
+            if(canRetrieveJelly) { RetriveJelly(); }
+            SetJellyColoring(Coloring.Red);
+            isEyeGet = false;
+            slimeEye.SetActive(false);
+            SetCursorIcon(1);
+        }
+    }
+
 }
